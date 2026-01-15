@@ -222,9 +222,19 @@ class CategoryItem {
   });
 
   factory CategoryItem.fromJson(Map<String, dynamic> json) {
+    // Handle subcategory - it should be int but defensively handle other types
+    int subcategoryValue = 0;
+    if (json['subcategory'] != null) {
+      if (json['subcategory'] is int) {
+        subcategoryValue = json['subcategory'];
+      } else if (json['subcategory'] is String) {
+        subcategoryValue = int.tryParse(json['subcategory']) ?? 0;
+      }
+    }
+
     return CategoryItem(
       category: CategoryDetail.fromJson(json['category'] ?? {}),
-      subcategory: json['subcategory'] ?? 0,
+      subcategory: subcategoryValue,
     );
   }
 }

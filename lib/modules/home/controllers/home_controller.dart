@@ -4,10 +4,13 @@ import '../../../models/category_model.dart';
 import '../../../models/product_model.dart';
 import '../../../models/home_response_model.dart';
 import '../../../services/home_service.dart';
+import '../../../services/storage_service.dart';
 import '../../../constants/api_constants.dart';
+import '../../../routes/app_pages.dart';
 
 class HomeController extends GetxController {
   final HomeService _homeService = HomeService();
+  final StorageService _storageService = StorageService();
 
   final RxInt currentCarouselIndex = 0.obs;
   final RxList<ProductModel> featuredProducts = <ProductModel>[].obs;
@@ -208,5 +211,32 @@ class HomeController extends GetxController {
       '${product.name} added to cart',
       snackPosition: SnackPosition.BOTTOM,
     );
+  }
+
+  Future<void> logout() async {
+    try {
+      // Clear authentication data
+      await _storageService.clearAuthData();
+
+      // Navigate to login screen
+      Get.offAllNamed(Routes.LOGIN);
+
+      // Show success message
+      Get.snackbar(
+        'Logged Out',
+        'You have been logged out successfully',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.withValues(alpha: 0.1),
+        colorText: Colors.green,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to logout. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
+        colorText: Colors.red,
+      );
+    }
   }
 }

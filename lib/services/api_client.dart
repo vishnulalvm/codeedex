@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../constants/api_constants.dart';
 
 class ApiClient {
@@ -22,23 +23,16 @@ class ApiClient {
       ),
     );
 
-    // Add interceptors for logging and error handling
+    // Add pretty_dio_logger for better logging and error handling
     dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          print('REQUEST[${options.method}] => PATH: ${options.path}');
-          return handler.next(options);
-        },
-        onResponse: (response, handler) {
-          print(
-              'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
-          return handler.next(response);
-        },
-        onError: (error, handler) {
-          print(
-              'ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}');
-          return handler.next(error);
-        },
+      PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90,
       ),
     );
   }
@@ -57,6 +51,7 @@ class ApiClient {
       );
       return response;
     } catch (e) {
+      print('GET request error: $e');
       rethrow;
     }
   }
@@ -77,6 +72,7 @@ class ApiClient {
       );
       return response;
     } catch (e) {
+      print('POST request error: $e');
       rethrow;
     }
   }

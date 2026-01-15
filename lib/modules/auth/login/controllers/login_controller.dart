@@ -59,10 +59,14 @@ class LoginController extends GetxController {
       final response = await _authService.login(request);
 
       // Check if login was successful
-      if (response.isSuccess && response.id != null && response.token != null) {
-        // Store user credentials
-        await _storageService.saveUserId(response.id!);
-        await _storageService.saveToken(response.token!);
+      if (response.isSuccess) {
+        // Store user credentials if available
+        if (response.id != null) {
+          await _storageService.saveUserId(response.id!);
+        }
+        if (response.token != null) {
+          await _storageService.saveToken(response.token!);
+        }
 
         // Store user data if available
         if (response.userData != null) {

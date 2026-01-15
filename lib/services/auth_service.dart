@@ -29,6 +29,7 @@ class AuthService {
         throw Exception('Network error. Please check your connection.');
       }
     } catch (e) {
+      print('An unexpected error occurred: $e');
       throw Exception('An unexpected error occurred: $e');
     }
   }

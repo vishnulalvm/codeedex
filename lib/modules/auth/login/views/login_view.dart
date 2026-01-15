@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../controllers/login_controller.dart';
+import '../../../../routes/app_pages.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -10,7 +11,7 @@ class LoginView extends GetView<LoginController> {
   
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF2F2F2),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -20,14 +21,14 @@ class LoginView extends GetView<LoginController> {
                   Image.asset(
                     'assets/image/Frame 427320120.png',
                     width: double.infinity,
-                    height: 450.h,
+                    height: 300.h,
                     fit: BoxFit.cover,
                   ),
                   Positioned(
                     top: 16.h,
                     right: 16.w,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () => Get.offAllNamed(Routes.HOME),
                       child: Row(
                         children: [
                           Text(
@@ -65,7 +66,7 @@ class LoginView extends GetView<LoginController> {
                         color: Colors.black,
                       ),
                     ),
-                    SizedBox(height: 32.h),
+                    SizedBox(height: 18.h),
                     Text(
                       'Email Address',
                       style: TextStyle(
@@ -86,7 +87,7 @@ class LoginView extends GetView<LoginController> {
                           color: Colors.black87,
                         ),
                         filled: true,
-                        fillColor: const Color(0xFFF5F5F5),
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.r),
                           borderSide: BorderSide.none,
@@ -125,7 +126,7 @@ class LoginView extends GetView<LoginController> {
                             color: Colors.black87,
                           ),
                           filled: true,
-                          fillColor: const Color(0xFFF5F5F5),
+                          fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12.r),
                             borderSide: BorderSide.none,
