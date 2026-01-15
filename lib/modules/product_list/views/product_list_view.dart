@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../models/product_model.dart';
 import '../../../widgets/cached_image.dart';
 import '../controllers/product_list_controller.dart';
@@ -26,8 +25,8 @@ class ProductListView extends GetView<ProductListController> {
             children: [
               Text(
                 controller.categoryName.value,
-                style: GoogleFonts.getFont(
-                  'Lufga',
+                style: TextStyle(
+                  fontFamily: 'Lufga',
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -35,8 +34,8 @@ class ProductListView extends GetView<ProductListController> {
               ),
               Text(
                 '${controller.totalItems.value} Items',
-                style: GoogleFonts.getFont(
-                  'Lufga',
+                style: TextStyle(
+                  fontFamily: 'Lufga',
                   fontSize: 12.sp,
                   color: Colors.grey,
                   fontWeight: FontWeight.w400,
@@ -74,7 +73,7 @@ class ProductListView extends GetView<ProductListController> {
                       Text(
                         controller.errorMessage.value,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.getFont('Lufga', fontSize: 16.sp),
+                        style: TextStyle(fontFamily: 'Lufga', fontSize: 16.sp),
                       ),
                       SizedBox(height: 16.h),
                       ElevatedButton(
@@ -95,7 +94,7 @@ class ProductListView extends GetView<ProductListController> {
                       SizedBox(height: 16.h),
                       Text(
                         'No products found',
-                        style: GoogleFonts.getFont('Lufga', fontSize: 16.sp),
+                        style: TextStyle(fontFamily: 'Lufga', fontSize: 16.sp),
                       ),
                     ],
                   ),
@@ -204,8 +203,8 @@ class ProductListView extends GetView<ProductListController> {
                       ),
                       child: Text(
                         '$discount% off',
-                        style: GoogleFonts.getFont(
-                          'Lufga',
+                        style: TextStyle(
+                          fontFamily: 'Lufga',
                           fontSize: 10.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -246,8 +245,8 @@ class ProductListView extends GetView<ProductListController> {
                   children: [
                     Text(
                       product.name,
-                      style: GoogleFonts.getFont(
-                        'Lufga',
+                      style: TextStyle(
+                        fontFamily: 'Lufga',
                         fontSize: 14.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
@@ -261,8 +260,8 @@ class ProductListView extends GetView<ProductListController> {
                         if (product.originalPrice > 0)
                           Text(
                             'QAR ${product.originalPrice.toStringAsFixed(2)}',
-                            style: GoogleFonts.getFont(
-                              'Lufga',
+                            style: TextStyle(
+                              fontFamily: 'Lufga',
                               fontSize: 12.sp,
                               color: Colors.grey,
                               fontWeight: FontWeight.w400,
@@ -273,8 +272,8 @@ class ProductListView extends GetView<ProductListController> {
                         Expanded(
                           child: Text(
                             'QAR ${product.discountedPrice.toStringAsFixed(2)}',
-                            style: GoogleFonts.getFont(
-                              'Lufga',
+                            style: TextStyle(
+                              fontFamily: 'Lufga',
                               fontSize: 15.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -319,8 +318,8 @@ class ProductListView extends GetView<ProductListController> {
           children: [
             Text(
               'Add',
-              style: GoogleFonts.getFont(
-                'Lufga',
+              style: TextStyle(
+                fontFamily: 'Lufga',
                 fontSize: 14.sp,
                 color: const Color(0xFF8B4513),
                 fontWeight: FontWeight.w600,
@@ -364,8 +363,8 @@ class ProductListView extends GetView<ProductListController> {
           Obx(
             () => Text(
               '${controller.getQuantity(productId)}',
-              style: GoogleFonts.getFont(
-                'Lufga',
+              style: TextStyle(
+                fontFamily: 'Lufga',
                 fontSize: 16.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
@@ -427,8 +426,8 @@ class ProductListView extends GetView<ProductListController> {
                   SizedBox(width: 8.w),
                   Text(
                     'Sort By',
-                    style: GoogleFonts.getFont(
-                      'Lufga',
+                    style: TextStyle(
+                      fontFamily: 'Lufga',
                       fontSize: 15.sp,
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
@@ -460,8 +459,8 @@ class ProductListView extends GetView<ProductListController> {
                   SizedBox(width: 8.w),
                   Text(
                     'Filter',
-                    style: GoogleFonts.getFont(
-                      'Lufga',
+                    style: TextStyle(
+                      fontFamily: 'Lufga',
                       fontSize: 15.sp,
                       color: Colors.black,
                       fontWeight: FontWeight.w600,

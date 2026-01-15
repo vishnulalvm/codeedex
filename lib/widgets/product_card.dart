@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../models/product_model.dart';
 import 'cached_image.dart';
 
@@ -93,8 +92,8 @@ class ProductCard extends StatelessWidget {
               children: [
                 Text(
                   product.category,
-                  style: GoogleFonts.getFont(
-                    'Lufga',
+                  style: TextStyle(
+                    fontFamily: 'Lufga',
                     fontSize: 11.sp,
                     color: Colors.grey,
                     fontWeight: FontWeight.w400,
@@ -105,8 +104,8 @@ class ProductCard extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   product.name,
-                  style: GoogleFonts.getFont(
-                    'Lufga',
+                  style: TextStyle(
+                    fontFamily: 'Lufga',
                     fontSize: 13.sp,
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
@@ -120,8 +119,8 @@ class ProductCard extends StatelessWidget {
                     if (product.originalPrice > 0)
                       Text(
                         'QAR ${product.originalPrice.toStringAsFixed(2)}',
-                        style: GoogleFonts.getFont(
-                          'Lufga',
+                        style: TextStyle(
+                          fontFamily: 'Lufga',
                           fontSize: 11.sp,
                           color: Colors.grey,
                           fontWeight: FontWeight.w400,
@@ -131,8 +130,8 @@ class ProductCard extends StatelessWidget {
                     if (product.originalPrice > 0) SizedBox(width: 6.w),
                     Text(
                       'QAR ${product.discountedPrice.toStringAsFixed(2)}',
-                      style: GoogleFonts.getFont(
-                        'Lufga',
+                      style: TextStyle(
+                        fontFamily: 'Lufga',
                         fontSize: 14.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -158,8 +157,8 @@ class ProductCard extends StatelessWidget {
                       children: [
                         Text(
                           'Add',
-                          style: GoogleFonts.getFont(
-                            'Lufga',
+                          style: TextStyle(
+                            fontFamily: 'Lufga',
                             fontSize: 13.sp,
                             color: const Color(0xFF8B4513),
                             fontWeight: FontWeight.w600,

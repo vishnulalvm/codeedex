@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../controllers/product_detail_controller.dart';
 
 class ProductDetailView extends GetView<ProductDetailController> {
@@ -79,7 +78,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     spreadRadius: 2,
                     blurRadius: 10,
                     offset: const Offset(0, 2),
@@ -158,8 +157,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
         children: [
           Text(
             product.name,
-            style: GoogleFonts.getFont(
-              'Lufga',
+            style: TextStyle(
+              fontFamily: 'Lufga',
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -168,8 +167,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
           SizedBox(height: 6.h),
           Text(
             product.category,
-            style: GoogleFonts.getFont(
-              'Lufga',
+            style: TextStyle(
+              fontFamily: 'Lufga',
               fontSize: 14.sp,
               color: Colors.grey,
               fontWeight: FontWeight.w400,
@@ -180,8 +179,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
             children: [
               Text(
                 '₹ ${product.originalPrice.toStringAsFixed(2)}',
-                style: GoogleFonts.getFont(
-                  'Lufga',
+                style: TextStyle(
+                  fontFamily: 'Lufga',
                   fontSize: 16.sp,
                   color: Colors.grey,
                   fontWeight: FontWeight.w400,
@@ -193,8 +192,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
               SizedBox(width: 8.w),
               Text(
                 '₹ ${product.discountedPrice.toStringAsFixed(2)}',
-                style: GoogleFonts.getFont(
-                  'Lufga',
+                style: TextStyle(
+                  fontFamily: 'Lufga',
                   fontSize: 24.sp,
                   color: const Color(0xFF8B4513),
                   fontWeight: FontWeight.bold,
@@ -205,13 +204,13 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF8B4513).withOpacity(0.1),
+                    color: const Color(0xFF8B4513).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4.r),
                   ),
                   child: Text(
                     '($discount% off)',
-                    style: GoogleFonts.getFont(
-                      'Lufga',
+                    style: TextStyle(
+                      fontFamily: 'Lufga',
                       fontSize: 14.sp,
                       color: const Color(0xFF8B4513),
                       fontWeight: FontWeight.w600,
@@ -242,8 +241,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
         children: [
           Text(
             'Description',
-            style: GoogleFonts.getFont(
-              'Lufga',
+            style: TextStyle(
+              fontFamily: 'Lufga',
               fontSize: 18.sp,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -252,8 +251,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
           SizedBox(height: 12.h),
           Text(
             'Bag of Green offers premium Strawberries from South Africa, prized for their vibrant red color, natural sweetness, and juicy texture. Perfect for snacking, desserts, and smoothies, these strawberries are carefully sourced and delivered fresh anywhere in the UAE. Enjoy the delicious taste and quality of South African strawberries at your convenience.',
-            style: GoogleFonts.getFont(
-              'Lufga',
+            style: TextStyle(
+              fontFamily: 'Lufga',
               fontSize: 14.sp,
               color: Colors.grey[700],
               fontWeight: FontWeight.w400,
@@ -273,8 +272,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Text(
             'Related Products',
-            style: GoogleFonts.getFont(
-              'Lufga',
+            style: TextStyle(
+              fontFamily: 'Lufga',
               fontSize: 18.sp,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -318,7 +317,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, 2),
@@ -358,8 +357,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   ),
                   child: Text(
                     discount,
-                    style: GoogleFonts.getFont(
-                      'Lufga',
+                    style: TextStyle(
+                      fontFamily: 'Lufga',
                       fontSize: 10.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -392,8 +391,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
               children: [
                 Text(
                   name,
-                  style: GoogleFonts.getFont(
-                    'Lufga',
+                  style: TextStyle(
+                    fontFamily: 'Lufga',
                     fontSize: 13.sp,
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
@@ -406,8 +405,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   children: [
                     Text(
                       '₹ ${originalPrice.toStringAsFixed(2)}',
-                      style: GoogleFonts.getFont(
-                        'Lufga',
+                      style: TextStyle(
+                        fontFamily: 'Lufga',
                         fontSize: 11.sp,
                         color: Colors.grey,
                         fontWeight: FontWeight.w400,
@@ -417,8 +416,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                     SizedBox(width: 6.w),
                     Text(
                       '₹ ${discountedPrice.toStringAsFixed(2)}',
-                      style: GoogleFonts.getFont(
-                        'Lufga',
+                      style: TextStyle(
+                        fontFamily: 'Lufga',
                         fontSize: 14.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -451,8 +450,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             ),
                             Text(
                               '1',
-                              style: GoogleFonts.getFont(
-                                'Lufga',
+                              style: TextStyle(
+                                fontFamily: 'Lufga',
                                 fontSize: 14.sp,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -490,8 +489,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             children: [
                               Text(
                                 'Add',
-                                style: GoogleFonts.getFont(
-                                  'Lufga',
+                                style: TextStyle(
+                                  fontFamily: 'Lufga',
                                   fontSize: 13.sp,
                                   color: const Color(0xFF8B4513),
                                   fontWeight: FontWeight.w600,
@@ -522,7 +521,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -2),
@@ -546,8 +545,8 @@ class ProductDetailView extends GetView<ProductDetailController> {
               children: [
                 Text(
                   'Add To Cart',
-                  style: GoogleFonts.getFont(
-                    'Lufga',
+                  style: TextStyle(
+                    fontFamily: 'Lufga',
                     fontSize: 18.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.w600,

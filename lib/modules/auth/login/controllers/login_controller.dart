@@ -40,7 +40,7 @@ class LoginController extends GetxController {
         'Error',
         'Please fill in all fields',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.withOpacity(0.1),
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
         colorText: Colors.red,
       );
       return;
@@ -74,7 +74,7 @@ class LoginController extends GetxController {
           'Success',
           response.message,
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green.withOpacity(0.1),
+          backgroundColor: Colors.green.withValues(alpha: 0.1),
           colorText: Colors.green,
         );
 
@@ -86,7 +86,7 @@ class LoginController extends GetxController {
           'Login Failed',
           response.message,
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red.withOpacity(0.1),
+          backgroundColor: Colors.red.withValues(alpha: 0.1),
           colorText: Colors.red,
         );
       }
@@ -96,7 +96,7 @@ class LoginController extends GetxController {
         'Error',
         e.toString().replaceAll('Exception: ', ''),
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.withOpacity(0.1),
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
         colorText: Colors.red,
         duration: const Duration(seconds: 3),
       );

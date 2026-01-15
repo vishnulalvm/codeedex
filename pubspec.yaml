@@ -11,8 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   get: ^4.6.6
-  google_fonts: ^6.1.0
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.1.1
   flutter_screenutil: ^5.9.0
   dio: ^5.4.0
   get_storage: ^2.1.1
@@ -27,3 +26,15 @@ flutter:
 
   assets:
     - assets/image/
+
+  fonts:
+    - family: Lufga
+      fonts:
+        - asset: assets/fonts/Lufga/LufgaRegular.ttf
+          weight: 400
+        - asset: assets/fonts/Lufga/LufgaMedium.ttf
+          weight: 500
+        - asset: assets/fonts/Lufga/LufgaSemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Lufga/LufgaBold.ttf
+          weight: 700

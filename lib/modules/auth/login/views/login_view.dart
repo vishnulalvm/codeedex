@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -33,8 +32,8 @@ class LoginView extends GetView<LoginController> {
                         children: [
                           Text(
                             'Skip',
-                            style: GoogleFonts.getFont(
-                              'Lufga',
+                            style: TextStyle(
+                              fontFamily: 'Lufga',
                               fontSize: 16.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
@@ -59,8 +58,8 @@ class LoginView extends GetView<LoginController> {
                   children: [
                     Text(
                       'Login',
-                      style: GoogleFonts.getFont(
-                        'Lufga',
+                      style: TextStyle(
+                        fontFamily: 'Lufga',
                         fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -69,8 +68,8 @@ class LoginView extends GetView<LoginController> {
                     SizedBox(height: 32.h),
                     Text(
                       'Email Address',
-                      style: GoogleFonts.getFont(
-                        'Lufga',
+                      style: TextStyle(
+                        fontFamily: 'Lufga',
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
@@ -81,8 +80,8 @@ class LoginView extends GetView<LoginController> {
                       controller: controller.emailController,
                       decoration: InputDecoration(
                         hintText: 'Johndoe@Gmail.Com',
-                        hintStyle: GoogleFonts.getFont(
-                          'Lufga',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Lufga',
                           fontSize: 16.sp,
                           color: Colors.black87,
                         ),
@@ -97,8 +96,8 @@ class LoginView extends GetView<LoginController> {
                           vertical: 18.h,
                         ),
                       ),
-                      style: GoogleFonts.getFont(
-                        'Lufga',
+                      style: TextStyle(
+                        fontFamily: 'Lufga',
                         fontSize: 16.sp,
                         color: Colors.black,
                       ),
@@ -106,8 +105,8 @@ class LoginView extends GetView<LoginController> {
                     SizedBox(height: 24.h),
                     Text(
                       'Password',
-                      style: GoogleFonts.getFont(
-                        'Lufga',
+                      style: TextStyle(
+                        fontFamily: 'Lufga',
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
@@ -120,8 +119,8 @@ class LoginView extends GetView<LoginController> {
                         obscureText: !controller.isPasswordVisible.value,
                         decoration: InputDecoration(
                           hintText: '********',
-                          hintStyle: GoogleFonts.getFont(
-                            'Lufga',
+                          hintStyle: TextStyle(
+                            fontFamily: 'Lufga',
                             fontSize: 16.sp,
                             color: Colors.black87,
                           ),
@@ -146,8 +145,8 @@ class LoginView extends GetView<LoginController> {
                             onPressed: controller.togglePasswordVisibility,
                           ),
                         ),
-                        style: GoogleFonts.getFont(
-                          'Lufga',
+                        style: TextStyle(
+                          fontFamily: 'Lufga',
                           fontSize: 16.sp,
                           color: Colors.black,
                         ),
@@ -160,8 +159,8 @@ class LoginView extends GetView<LoginController> {
                         onPressed: controller.forgotPassword,
                         child: Text(
                           'Forgot password?',
-                          style: GoogleFonts.getFont(
-                            'Lufga',
+                          style: TextStyle(
+                            fontFamily: 'Lufga',
                             fontSize: 14.sp,
                             color: Colors.black,
                             decoration: TextDecoration.underline,
@@ -196,8 +195,8 @@ class LoginView extends GetView<LoginController> {
                                 )
                               : Text(
                                   'Login',
-                                  style: GoogleFonts.getFont(
-                                    'Lufga',
+                                  style: TextStyle(
+                                    fontFamily: 'Lufga',
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white,
@@ -213,8 +212,8 @@ class LoginView extends GetView<LoginController> {
                         children: [
                           Text(
                             "Don't Have an account? ",
-                            style: GoogleFonts.getFont(
-                              'Lufga',
+                            style: TextStyle(
+                              fontFamily: 'Lufga',
                               fontSize: 14.sp,
                               color: Colors.black,
                             ),
@@ -223,8 +222,8 @@ class LoginView extends GetView<LoginController> {
                             onTap: controller.signUp,
                             child: Text(
                               'Sign Up',
-                              style: GoogleFonts.getFont(
-                                'Lufga',
+                              style: TextStyle(
+                                fontFamily: 'Lufga',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,

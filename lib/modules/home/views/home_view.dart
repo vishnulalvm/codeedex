@@ -1,8 +1,7 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../widgets/product_card.dart';
 import '../controllers/home_controller.dart';
 
@@ -77,7 +76,7 @@ class HomeView extends GetView<HomeController> {
                 Text(
                   controller.errorMessage.value,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.getFont('Lufga', fontSize: 16.sp),
+                  style: TextStyle(fontFamily: 'Lufga', fontSize: 16.sp),
                 ),
                 SizedBox(height: 16.h),
                 ElevatedButton(
@@ -128,8 +127,8 @@ class HomeView extends GetView<HomeController> {
 
       return Column(
         children: [
-          CarouselSlider(
-            options: CarouselOptions(
+          carousel.CarouselSlider(
+            options: carousel.CarouselOptions(
               height: 180.h,
               viewportFraction: 0.9,
               autoPlay: true,
@@ -193,8 +192,8 @@ class HomeView extends GetView<HomeController> {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.getFont(
-                    'Lufga',
+                  style: TextStyle(
+                    fontFamily: 'Lufga',
                     fontSize: 14.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -205,8 +204,8 @@ class HomeView extends GetView<HomeController> {
                   width: 160.w,
                   child: Text(
                     subtitle,
-                    style: GoogleFonts.getFont(
-                      'Lufga',
+                    style: TextStyle(
+                      fontFamily: 'Lufga',
                       fontSize: 20.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -227,8 +226,8 @@ class HomeView extends GetView<HomeController> {
                   ),
                   child: Text(
                     buttonText,
-                    style: GoogleFonts.getFont(
-                      'Lufga',
+                    style: TextStyle(
+                      fontFamily: 'Lufga',
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                     ),
@@ -253,8 +252,8 @@ class HomeView extends GetView<HomeController> {
             children: [
               Text(
                 'Categories',
-                style: GoogleFonts.getFont(
-                  'Lufga',
+                style: TextStyle(
+                  fontFamily: 'Lufga',
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -317,8 +316,8 @@ class HomeView extends GetView<HomeController> {
                         Text(
                           category.name,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.getFont(
-                            'Lufga',
+                          style: TextStyle(
+                            fontFamily: 'Lufga',
                             fontSize: 11.sp,
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
@@ -389,8 +388,8 @@ class HomeView extends GetView<HomeController> {
             children: [
               Text(
                 title,
-                style: GoogleFonts.getFont(
-                  'Lufga',
+                style: TextStyle(
+                  fontFamily: 'Lufga',
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -461,8 +460,8 @@ class HomeView extends GetView<HomeController> {
               children: [
                 Text(
                   'Hurry Up! Get 10% Off',
-                  style: GoogleFonts.getFont(
-                    'Lufga',
+                  style: TextStyle(
+                    fontFamily: 'Lufga',
                     fontSize: 14.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -471,8 +470,8 @@ class HomeView extends GetView<HomeController> {
                 SizedBox(height: 8.h),
                 Text(
                   'Power Your Day\nwith Nuts & Dry Fruits',
-                  style: GoogleFonts.getFont(
-                    'Lufga',
+                  style: TextStyle(
+                    fontFamily: 'Lufga',
                     fontSize: 18.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -492,8 +491,8 @@ class HomeView extends GetView<HomeController> {
                   ),
                   child: Text(
                     'Shop Now',
-                    style: GoogleFonts.getFont(
-                      'Lufga',
+                    style: TextStyle(
+                      fontFamily: 'Lufga',
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                     ),
@@ -519,7 +518,7 @@ class HomeView extends GetView<HomeController> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -2),
@@ -532,14 +531,13 @@ class HomeView extends GetView<HomeController> {
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF8B4513),
         unselectedItemColor: Colors.grey,
-        selectedLabelStyle: GoogleFonts.getFont(
-          'Lufga',
+        selectedLabelStyle: TextStyle(
+          fontFamily: 'Lufga',
           fontSize: 12.sp,
           fontWeight: FontWeight.w600,
         ),
-        unselectedLabelStyle: GoogleFonts.getFont(
-          'Lufga',
-
+        unselectedLabelStyle: TextStyle(
+          fontFamily: 'Lufga',
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
