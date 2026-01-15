@@ -114,30 +114,34 @@ class ProductCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 8.h),
-                Row(
-                  children: [
-                    if (product.originalPrice > 0)
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      if (product.originalPrice > 0)
+                        Text(
+                          'QAR ${product.originalPrice.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontFamily: 'Lufga',
+                            fontSize: 11.sp,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                      if (product.originalPrice > 0) SizedBox(width: 6.w),
                       Text(
-                        'QAR ${product.originalPrice.toStringAsFixed(2)}',
+                        'QAR ${product.discountedPrice.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontFamily: 'Lufga',
-                          fontSize: 11.sp,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.lineThrough,
+                          fontSize: 14.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    if (product.originalPrice > 0) SizedBox(width: 6.w),
-                    Text(
-                      'QAR ${product.discountedPrice.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontFamily: 'Lufga',
-                        fontSize: 14.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 SizedBox(height: 10.h),
                 SizedBox(

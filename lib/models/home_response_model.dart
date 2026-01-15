@@ -51,83 +51,107 @@ class HomeResponse {
 
   factory HomeResponse.fromJson(Map<String, dynamic> json) {
     return HomeResponse(
-      success: json['success'] ?? 0,
+      success: _toInt(json['success']),
       message: json['message'] ?? '',
-      banner1: (json['banner1'] as List<dynamic>?)
+      banner1:
+          (json['banner1'] as List<dynamic>?)
               ?.map((e) => BannerModel.fromJson(e))
               .toList() ??
           [],
-      banner2: (json['banner2'] as List<dynamic>?)
+      banner2:
+          (json['banner2'] as List<dynamic>?)
               ?.map((e) => BannerModel.fromJson(e))
               .toList() ??
           [],
-      banner3: (json['banner3'] as List<dynamic>?)
+      banner3:
+          (json['banner3'] as List<dynamic>?)
               ?.map((e) => BannerModel.fromJson(e))
               .toList() ??
           [],
-      banner4: (json['banner4'] as List<dynamic>?)
+      banner4:
+          (json['banner4'] as List<dynamic>?)
               ?.map((e) => BannerModel.fromJson(e))
               .toList() ??
           [],
-      banner5: (json['banner5'] as List<dynamic>?)
+      banner5:
+          (json['banner5'] as List<dynamic>?)
               ?.map((e) => BannerModel.fromJson(e))
               .toList() ??
           [],
-      banner6: (json['banner6'] as List<dynamic>?)
+      banner6:
+          (json['banner6'] as List<dynamic>?)
               ?.map((e) => BannerModel.fromJson(e))
               .toList() ??
           [],
-      banner7: (json['banner7'] as List<dynamic>?)
+      banner7:
+          (json['banner7'] as List<dynamic>?)
               ?.map((e) => BannerModel.fromJson(e))
               .toList() ??
           [],
-      recentViews: (json['recentviews'] as List<dynamic>?)
+      recentViews:
+          (json['recentviews'] as List<dynamic>?)
               ?.map((e) => ProductItem.fromJson(e))
               .toList() ??
           [],
-      ourProducts: (json['our_products'] as List<dynamic>?)
+      ourProducts:
+          (json['our_products'] as List<dynamic>?)
               ?.map((e) => ProductItem.fromJson(e))
               .toList() ??
           [],
-      suggestedProducts: (json['suggested_products'] as List<dynamic>?)
+      suggestedProducts:
+          (json['suggested_products'] as List<dynamic>?)
               ?.map((e) => ProductItem.fromJson(e))
               .toList() ??
           [],
-      bestSeller: (json['best_seller'] as List<dynamic>?)
+      bestSeller:
+          (json['best_seller'] as List<dynamic>?)
               ?.map((e) => ProductItem.fromJson(e))
               .toList() ??
           [],
-      flashSale: (json['flash_sail'] as List<dynamic>?)
+      flashSale:
+          (json['flash_sail'] as List<dynamic>?)
               ?.map((e) => ProductItem.fromJson(e))
               .toList() ??
           [],
-      newArrivals: (json['newarrivals'] as List<dynamic>?)
+      newArrivals:
+          (json['newarrivals'] as List<dynamic>?)
               ?.map((e) => ProductItem.fromJson(e))
               .toList() ??
           [],
-      categories: (json['categories'] as List<dynamic>?)
+      categories:
+          (json['categories'] as List<dynamic>?)
               ?.map((e) => CategoryItem.fromJson(e))
               .toList() ??
           [],
-      topAccessories: (json['top_accessories'] as List<dynamic>?)
+      topAccessories:
+          (json['top_accessories'] as List<dynamic>?)
               ?.map((e) => CategoryItem.fromJson(e))
               .toList() ??
           [],
-      featuredBrands: (json['featuredbrands'] as List<dynamic>?)
+      featuredBrands:
+          (json['featuredbrands'] as List<dynamic>?)
               ?.map((e) => FeaturedBrand.fromJson(e))
               .toList() ??
           [],
-      cartCount: json['cartcount'] ?? 0,
-      wishlistCount: json['wishlistcount'],
+      cartCount: _toInt(json['cartcount']),
+      wishlistCount: _toInt(json['wishlistcount']),
       currency: json['currency'] != null
           ? CurrencyModel.fromJson(json['currency'])
           : null,
       address: json['address'],
-      notificationCount: json['notification_count'] ?? 0,
+      notificationCount: _toInt(json['notification_count']),
     );
   }
 
   bool get isSuccess => success == 1;
+
+  static int _toInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is List) return 0;
+    return 0;
+  }
 }
 
 class BannerModel {
@@ -155,9 +179,9 @@ class BannerModel {
 
   factory BannerModel.fromJson(Map<String, dynamic> json) {
     return BannerModel(
-      id: json['id'] ?? 0,
-      bannerTypeId: json['banner_type_id'] ?? 0,
-      linkType: json['link_type'] ?? 0,
+      id: HomeResponse._toInt(json['id']),
+      bannerTypeId: HomeResponse._toInt(json['banner_type_id']),
+      linkType: HomeResponse._toInt(json['link_type']),
       linkValue: json['link_value'] ?? '',
       image: json['image'] ?? '',
       mobileImage: json['mobile_image'] ?? '',
@@ -201,9 +225,9 @@ class ProductItem {
       manufacturer: json['manufacturer'] ?? '',
       symbolLeft: json['symbol_left'] ?? '',
       symbolRight: json['symbol_right'] ?? '',
-      oldPrice: json['oldprice'] ?? '0',
-      price: json['price'] ?? '0',
-      discount: json['discount'] ?? '0',
+      oldPrice: json['oldprice']?.toString() ?? '0',
+      price: json['price']?.toString() ?? '0',
+      discount: json['discount']?.toString() ?? '0',
       image: json['image'] ?? '',
     );
   }
@@ -216,25 +240,12 @@ class CategoryItem {
   final CategoryDetail category;
   final int subcategory;
 
-  CategoryItem({
-    required this.category,
-    required this.subcategory,
-  });
+  CategoryItem({required this.category, required this.subcategory});
 
   factory CategoryItem.fromJson(Map<String, dynamic> json) {
-    // Handle subcategory - it should be int but defensively handle other types
-    int subcategoryValue = 0;
-    if (json['subcategory'] != null) {
-      if (json['subcategory'] is int) {
-        subcategoryValue = json['subcategory'];
-      } else if (json['subcategory'] is String) {
-        subcategoryValue = int.tryParse(json['subcategory']) ?? 0;
-      }
-    }
-
     return CategoryItem(
       category: CategoryDetail.fromJson(json['category'] ?? {}),
-      subcategory: subcategoryValue,
+      subcategory: HomeResponse._toInt(json['subcategory']),
     );
   }
 }
@@ -256,7 +267,7 @@ class CategoryDetail {
 
   factory CategoryDetail.fromJson(Map<String, dynamic> json) {
     return CategoryDetail(
-      id: json['id'] ?? 0,
+      id: HomeResponse._toInt(json['id']),
       slug: json['slug'],
       image: json['image'] ?? '',
       name: json['name'] ?? '',
@@ -280,7 +291,7 @@ class FeaturedBrand {
 
   factory FeaturedBrand.fromJson(Map<String, dynamic> json) {
     return FeaturedBrand(
-      id: json['id'] ?? 0,
+      id: HomeResponse._toInt(json['id']),
       image: json['image'] ?? '',
       slug: json['slug'] ?? '',
       name: json['name'] ?? '',
@@ -311,8 +322,8 @@ class CurrencyModel {
       code: json['code'] ?? '',
       symbolLeft: json['symbol_left'] ?? '',
       symbolRight: json['symbol_right'] ?? '',
-      value: json['value'] ?? '1.00',
-      status: json['status'] ?? 1,
+      value: json['value']?.toString() ?? '1.00',
+      status: HomeResponse._toInt(json['status']),
     );
   }
 }

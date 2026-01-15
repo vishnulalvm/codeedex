@@ -14,13 +14,24 @@ class ProductListResponse {
   });
 
   factory ProductListResponse.fromJson(Map<String, dynamic> json) {
+    var productsData = json['products'];
+    List<dynamic> productsList = [];
+
+    if (productsData is List) {
+      productsList = productsData;
+    } else if (productsData is Map<String, dynamic>) {
+      if (productsData.containsKey('data') && productsData['data'] is List) {
+        productsList = productsData['data'];
+      } else if (productsData.containsKey('items') &&
+          productsData['items'] is List) {
+        productsList = productsData['items'];
+      }
+    }
+
     return ProductListResponse(
       success: json['success'] ?? 0,
       message: json['message'] ?? '',
-      products: (json['products'] as List<dynamic>?)
-              ?.map((e) => ProductListItem.fromJson(e))
-              .toList() ??
-          [],
+      products: productsList.map((e) => ProductListItem.fromJson(e)).toList(),
       pagination: json['pagination'] != null
           ? PaginationData.fromJson(json['pagination'])
           : null,
@@ -160,11 +171,7 @@ class FilterOption {
   final String name;
   final int count;
 
-  FilterOption({
-    required this.id,
-    required this.name,
-    required this.count,
-  });
+  FilterOption({required this.id, required this.name, required this.count});
 
   factory FilterOption.fromJson(Map<String, dynamic> json) {
     return FilterOption(
@@ -179,10 +186,7 @@ class PriceRange {
   final double min;
   final double max;
 
-  PriceRange({
-    required this.min,
-    required this.max,
-  });
+  PriceRange({required this.min, required this.max});
 
   factory PriceRange.fromJson(Map<String, dynamic> json) {
     return PriceRange(

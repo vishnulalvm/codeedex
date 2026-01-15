@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../widgets/product_card.dart';
+import '../../../widgets/cached_image.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -94,6 +95,7 @@ class HomeView extends GetView<HomeController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 16.h),
                 _buildCarousel(),
                 SizedBox(height: 20.h),
                 _buildCategories(),
@@ -129,11 +131,12 @@ class HomeView extends GetView<HomeController> {
         children: [
           carousel.CarouselSlider(
             options: carousel.CarouselOptions(
-              height: 180.h,
-              viewportFraction: 0.9,
+              height: 200.h,
+              viewportFraction: 0.92,
               autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 3),
+              autoPlayInterval: const Duration(seconds: 4),
               enlargeCenterPage: true,
+              enlargeFactor: 0.2,
               onPageChanged: (index, reason) {
                 controller.onCarouselChanged(index);
               },
@@ -164,79 +167,37 @@ class HomeView extends GetView<HomeController> {
     Color backgroundColor,
     String buttonText,
   ) {
+    final bool isNetworkImage =
+        imagePath.startsWith('http') || imagePath.startsWith('https');
+
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8.w),
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: 0,
-            bottom: 0,
-            top: 0,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-              child: Image.asset(imagePath, fit: BoxFit.cover, height: 180.h),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontFamily: 'Lufga',
-                    fontSize: 14.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                SizedBox(
-                  width: 160.w,
-                  child: Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontFamily: 'Lufga',
-                      fontSize: 20.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      height: 1.2,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: backgroundColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  ),
-                  child: Text(
-                    buttonText,
-                    style: TextStyle(
-                      fontFamily: 'Lufga',
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          BoxShadow(
+            color: backgroundColor.withOpacity(0.4),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20.r),
+        child: isNetworkImage
+            ? CachedImage(
+                imageUrl: imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              )
+            : Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
       ),
     );
   }
@@ -284,6 +245,9 @@ class HomeView extends GetView<HomeController> {
               itemCount: controller.categories.length,
               itemBuilder: (context, index) {
                 final category = controller.categories[index];
+                final imageUrl = controller.getCategoryImageUrl(category.image);
+                final bool isNetworkImage = imageUrl.startsWith('http');
+
                 return GestureDetector(
                   onTap: () {
                     Get.toNamed(
@@ -306,10 +270,15 @@ class HomeView extends GetView<HomeController> {
                             shape: BoxShape.circle,
                           ),
                           child: ClipOval(
-                            child: Image.asset(
-                              category.image,
-                              fit: BoxFit.cover,
-                            ),
+                            child: isNetworkImage
+                                ? CachedImage(
+                                    imageUrl: imageUrl,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    category.image,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                         SizedBox(height: 8.h),
@@ -412,7 +381,7 @@ class HomeView extends GetView<HomeController> {
         ),
         SizedBox(height: 12.h),
         SizedBox(
-          height: 280.h,
+          height: 310.h,
           child: Obx(
             () => ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -441,75 +410,41 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget _buildAdBanner() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF9B7CB6), Color(0xFF8B6BA3)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hurry Up! Get 10% Off',
-                  style: TextStyle(
-                    fontFamily: 'Lufga',
-                    fontSize: 14.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  'Power Your Day\nwith Nuts & Dry Fruits',
-                  style: TextStyle(
-                    fontFamily: 'Lufga',
-                    fontSize: 18.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF9B7CB6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  ),
-                  child: Text(
-                    'Shop Now',
-                    style: TextStyle(
-                      fontFamily: 'Lufga',
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
+    return Obx(() {
+      if (controller.adBanners.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
+      final banner = controller.adBanners.first;
+
+      if (banner.image.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
+      return Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, 2),
             ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.r),
+          child: CachedImage(
+            imageUrl: controller.getImageUrl(banner.image),
+            width: double.infinity,
+            height: 150.h,
+            fit: BoxFit.cover,
           ),
-          SizedBox(width: 16.w),
-          Image.asset(
-            'assets/image/adbanner_image.png',
-            height: 120.h,
-            fit: BoxFit.contain,
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 
   Widget _buildBottomNav() {

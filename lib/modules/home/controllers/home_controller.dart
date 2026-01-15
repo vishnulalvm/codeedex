@@ -56,73 +56,90 @@ class HomeController extends GetxController {
 
         // Load categories
         categories.value = response.categories
-            .map((item) => CategoryModel.fromJson({
-                  'category': {
-                    'id': item.category.id,
-                    'name': item.category.name,
-                    'image': item.category.image,
-                    'slug': item.category.slug,
-                    'description': item.category.description,
-                  },
-                  'subcategory': item.subcategory,
-                }))
+            .map(
+              (item) => CategoryModel.fromJson({
+                'category': {
+                  'id': item.category.id,
+                  'name': item.category.name,
+                  'image': item.category.image,
+                  'slug': item.category.slug,
+                  'description': item.category.description,
+                },
+                'subcategory': item.subcategory,
+              }),
+            )
             .toList();
 
         // Load products from different sections
-        featuredProducts.value =
-            response.ourProducts.map((p) => ProductModel.fromJson({
-                  'slug': p.slug,
-                  'name': p.name,
-                  'store': p.store,
-                  'manufacturer': p.manufacturer,
-                  'oldprice': p.oldPrice,
-                  'price': p.price,
-                  'image': p.image,
-                })).toList();
+        featuredProducts.value = response.ourProducts
+            .map(
+              (p) => ProductModel.fromJson({
+                'slug': p.slug,
+                'name': p.name,
+                'store': p.store,
+                'manufacturer': p.manufacturer,
+                'oldprice': p.oldPrice,
+                'price': p.price,
+                'image': getProductImageUrl(p.image),
+              }),
+            )
+            .toList();
 
-        dailyBestSelling.value =
-            response.bestSeller.map((p) => ProductModel.fromJson({
-                  'slug': p.slug,
-                  'name': p.name,
-                  'store': p.store,
-                  'manufacturer': p.manufacturer,
-                  'oldprice': p.oldPrice,
-                  'price': p.price,
-                  'image': p.image,
-                })).toList();
+        dailyBestSelling.value = response.bestSeller
+            .map(
+              (p) => ProductModel.fromJson({
+                'slug': p.slug,
+                'name': p.name,
+                'store': p.store,
+                'manufacturer': p.manufacturer,
+                'oldprice': p.oldPrice,
+                'price': p.price,
+                'image': getProductImageUrl(p.image),
+              }),
+            )
+            .toList();
 
-        recentlyAdded.value =
-            response.newArrivals.map((p) => ProductModel.fromJson({
-                  'slug': p.slug,
-                  'name': p.name,
-                  'store': p.store,
-                  'manufacturer': p.manufacturer,
-                  'oldprice': p.oldPrice,
-                  'price': p.price,
-                  'image': p.image,
-                })).toList();
+        recentlyAdded.value = response.newArrivals
+            .map(
+              (p) => ProductModel.fromJson({
+                'slug': p.slug,
+                'name': p.name,
+                'store': p.store,
+                'manufacturer': p.manufacturer,
+                'oldprice': p.oldPrice,
+                'price': p.price,
+                'image': getProductImageUrl(p.image),
+              }),
+            )
+            .toList();
 
-        popularProducts.value =
-            response.suggestedProducts.map((p) => ProductModel.fromJson({
-                  'slug': p.slug,
-                  'name': p.name,
-                  'store': p.store,
-                  'manufacturer': p.manufacturer,
-                  'oldprice': p.oldPrice,
-                  'price': p.price,
-                  'image': p.image,
-                })).toList();
+        popularProducts.value = response.suggestedProducts
+            .map(
+              (p) => ProductModel.fromJson({
+                'slug': p.slug,
+                'name': p.name,
+                'store': p.store,
+                'manufacturer': p.manufacturer,
+                'oldprice': p.oldPrice,
+                'price': p.price,
+                'image': getProductImageUrl(p.image),
+              }),
+            )
+            .toList();
 
-        trendingProducts.value =
-            response.flashSale.map((p) => ProductModel.fromJson({
-                  'slug': p.slug,
-                  'name': p.name,
-                  'store': p.store,
-                  'manufacturer': p.manufacturer,
-                  'oldprice': p.oldPrice,
-                  'price': p.price,
-                  'image': p.image,
-                })).toList();
+        trendingProducts.value = response.flashSale
+            .map(
+              (p) => ProductModel.fromJson({
+                'slug': p.slug,
+                'name': p.name,
+                'store': p.store,
+                'manufacturer': p.manufacturer,
+                'oldprice': p.oldPrice,
+                'price': p.price,
+                'image': getProductImageUrl(p.image),
+              }),
+            )
+            .toList();
 
         // Load other data
         featuredBrands.value = response.featuredBrands;
@@ -164,7 +181,7 @@ class HomeController extends GetxController {
   String getProductImageUrl(String imagePath) {
     if (imagePath.isEmpty) return '';
     if (imagePath.startsWith('http')) return imagePath;
-    return imagePath;
+    return '${ApiConstants.imageBaseUrl}/images/product/$imagePath';
   }
 
   String getBrandImageUrl(String imagePath) {
@@ -172,7 +189,6 @@ class HomeController extends GetxController {
     if (imagePath.startsWith('http')) return imagePath;
     return '${ApiConstants.imageBaseUrl}/images/manufacturer/$imagePath';
   }
-
 
   void onCarouselChanged(int index) {
     currentCarouselIndex.value = index;
