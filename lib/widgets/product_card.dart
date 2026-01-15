@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/product_model.dart';
 
@@ -17,10 +18,10 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 160,
+      width: 160.w,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -36,30 +37,30 @@ class ProductCard extends StatelessWidget {
           Stack(
             children: [
               Container(
-                height: 140,
+                height: 140.h,
                 decoration: BoxDecoration(
                   color: const Color(0xFFF5F5F5),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.r),
+                    topRight: Radius.circular(12.r),
                   ),
                 ),
                 child: Center(
                   child: Image.asset(
                     product.image,
-                    height: 100,
+                    height: 100.h,
                     fit: BoxFit.contain,
                   ),
                 ),
               ),
               Positioned(
-                top: 8,
-                right: 8,
+                top: 8.h,
+                right: 8.w,
                 child: InkWell(
                   onTap: onFavoritePressed,
                   child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
+                    padding: EdgeInsets.all(6.w),
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
@@ -68,7 +69,7 @@ class ProductCard extends StatelessWidget {
                           ? Icons.favorite
                           : Icons.favorite_border,
                       color: product.isFavorite ? Colors.red : Colors.grey,
-                      size: 18,
+                      size: 18.sp,
                     ),
                   ),
                 ),
@@ -76,7 +77,7 @@ class ProductCard extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -84,60 +85,60 @@ class ProductCard extends StatelessWidget {
                   product.category,
                   style: GoogleFonts.getFont(
                     'Lufga',
-                    fontSize: 11,
+                    fontSize: 11.sp,
                     color: Colors.grey,
                     fontWeight: FontWeight.w400,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   product.name,
                   style: GoogleFonts.getFont(
                     'Lufga',
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Row(
                   children: [
                     Text(
                       '₹ ${product.originalPrice.toStringAsFixed(2)}',
                       style: GoogleFonts.getFont(
                         'Lufga',
-                        fontSize: 11,
+                        fontSize: 11.sp,
                         color: Colors.grey,
                         fontWeight: FontWeight.w400,
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6.w),
                     Text(
                       '₹ ${product.discountedPrice.toStringAsFixed(2)}',
                       style: GoogleFonts.getFont(
                         'Lufga',
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 SizedBox(
                   width: double.infinity,
-                  height: 32,
+                  height: 32.h,
                   child: OutlinedButton(
                     onPressed: onAddToCart,
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFF8B4513)),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                       padding: EdgeInsets.zero,
                     ),
@@ -148,16 +149,16 @@ class ProductCard extends StatelessWidget {
                           'Add',
                           style: GoogleFonts.getFont(
                             'Lufga',
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             color: const Color(0xFF8B4513),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 4),
-                        const Icon(
+                        SizedBox(width: 4.w),
+                        Icon(
                           Icons.shopping_cart_outlined,
-                          color: Color(0xFF8B4513),
-                          size: 16,
+                          color: const Color(0xFF8B4513),
+                          size: 16.sp,
                         ),
                       ],
                     ),

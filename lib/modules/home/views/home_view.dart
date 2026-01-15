@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../widgets/product_card.dart';
@@ -42,21 +43,21 @@ class HomeView extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildCarousel(),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _buildCategories(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             _buildFeaturedProducts(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             _buildDailyBestSelling(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             _buildAdBanner(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             _buildRecentlyAdded(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             _buildPopularProducts(),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             _buildTrendingProducts(),
-            const SizedBox(height: 80),
+            SizedBox(height: 80.h),
           ],
         ),
       ),
@@ -69,7 +70,7 @@ class HomeView extends GetView<HomeController> {
       children: [
         CarouselSlider(
           options: CarouselOptions(
-            height: 180,
+            height: 180.h,
             viewportFraction: 0.9,
             autoPlay: true,
             autoPlayInterval: const Duration(seconds: 3),
@@ -98,10 +99,10 @@ class HomeView extends GetView<HomeController> {
     Color backgroundColor,
   ) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      margin: EdgeInsets.symmetric(horizontal: 8.w),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Stack(
         children: [
@@ -117,12 +118,12 @@ class HomeView extends GetView<HomeController> {
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.cover,
-                height: 180,
+                height: 180.h,
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -131,35 +132,35 @@ class HomeView extends GetView<HomeController> {
                   title,
                   style: GoogleFonts.getFont(
                     'Lufga',
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 SizedBox(
-                  width: 160,
+                  width: 160.w,
                   child: Text(
                     subtitle,
                     style: GoogleFonts.getFont(
                       'Lufga',
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       height: 1.2,
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: backgroundColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 10,
                     ),
@@ -168,7 +169,7 @@ class HomeView extends GetView<HomeController> {
                     'Shop Now',
                     style: GoogleFonts.getFont(
                       'Lufga',
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -186,7 +187,7 @@ class HomeView extends GetView<HomeController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -194,7 +195,7 @@ class HomeView extends GetView<HomeController> {
                 'Categories',
                 style: GoogleFonts.getFont(
                   'Lufga',
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -202,11 +203,11 @@ class HomeView extends GetView<HomeController> {
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, size: 16),
+                    icon:  Icon(Icons.arrow_back_ios, size: 16.sp),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: const Icon(Icons.arrow_forward_ios, size: 16),
+                    icon:  Icon(Icons.arrow_forward_ios, size: 16.sp),
                     onPressed: () {},
                   ),
                 ],
@@ -214,49 +215,57 @@ class HomeView extends GetView<HomeController> {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         SizedBox(
-          height: 110,
+          height: 110.h,
           child: Obx(
             () => ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
               itemCount: controller.categories.length,
               itemBuilder: (context, index) {
                 final category = controller.categories[index];
-                return Container(
-                  width: 80,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5F5F5),
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipOval(
-                          child: Image.asset(
-                            category.image,
-                            fit: BoxFit.cover,
+                return GestureDetector(
+                  onTap: () {
+                    Get.toNamed(
+                      '/product-list',
+                      arguments: {'categoryName': category.name.replaceAll('\n', ' ')},
+                    );
+                  },
+                  child: Container(
+                    width: 80.w,
+                    margin: EdgeInsets.symmetric(horizontal: 4.w),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 70.w,
+                          height: 70.h,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              category.image,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        category.name,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.getFont(
-                          'Lufga',
-                          fontSize: 11,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
+                        SizedBox(height: 8.h),
+                        Text(
+                          category.name,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.getFont(
+                            'Lufga',
+                            fontSize: 11.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
@@ -312,7 +321,7 @@ class HomeView extends GetView<HomeController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -320,7 +329,7 @@ class HomeView extends GetView<HomeController> {
                 title,
                 style: GoogleFonts.getFont(
                   'Lufga',
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -328,11 +337,11 @@ class HomeView extends GetView<HomeController> {
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, size: 16),
+                    icon:  Icon(Icons.arrow_back_ios, size: 16.sp),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: const Icon(Icons.arrow_forward_ios, size: 16),
+                    icon:  Icon(Icons.arrow_forward_ios, size: 16.sp),
                     onPressed: () {},
                   ),
                 ],
@@ -340,18 +349,18 @@ class HomeView extends GetView<HomeController> {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         SizedBox(
-          height: 280,
+          height: 280.h,
           child: Obx(
             () => ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 4.w),
                   child: ProductCard(
                     product: product,
                     onFavoritePressed: () {
@@ -372,15 +381,15 @@ class HomeView extends GetView<HomeController> {
 
   Widget _buildAdBanner() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF9B7CB6), Color(0xFF8B6BA3)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
         children: [
@@ -392,32 +401,32 @@ class HomeView extends GetView<HomeController> {
                   'Hurry Up! Get 10% Off',
                   style: GoogleFonts.getFont(
                     'Lufga',
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Text(
                   'Power Your Day\nwith Nuts & Dry Fruits',
                   style: GoogleFonts.getFont(
                     'Lufga',
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     height: 1.2,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: const Color(0xFF9B7CB6),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 10,
                     ),
@@ -426,7 +435,7 @@ class HomeView extends GetView<HomeController> {
                     'Shop Now',
                     style: GoogleFonts.getFont(
                       'Lufga',
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -434,10 +443,10 @@ class HomeView extends GetView<HomeController> {
               ],
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16.w),
           Image.asset(
             'assets/image/adbanner_image.png',
-            height: 120,
+            height: 120.h,
             fit: BoxFit.contain,
           ),
         ],
@@ -466,15 +475,15 @@ class HomeView extends GetView<HomeController> {
         unselectedItemColor: Colors.grey,
         selectedLabelStyle: GoogleFonts.getFont(
           'Lufga',
-          fontSize: 12,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w600,
         ),
         unselectedLabelStyle: GoogleFonts.getFont(
           'Lufga',
-          fontSize: 12,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
-        items: const [
+        items:  [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -495,7 +504,7 @@ class HomeView extends GetView<HomeController> {
                     backgroundColor: Colors.red,
                     child: Text(
                       '0',
-                      style: TextStyle(fontSize: 8, color: Colors.white),
+                      style: TextStyle(fontSize: 8.sp, color: Colors.white),
                     ),
                   ),
                 ),

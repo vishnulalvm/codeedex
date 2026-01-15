@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/login_controller.dart';
@@ -7,6 +8,7 @@ class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
 
   @override
+  
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -19,12 +21,12 @@ class LoginView extends GetView<LoginController> {
                   Image.asset(
                     'assets/image/Frame 427320120.png',
                     width: double.infinity,
-                    height: 450,
+                    height: 450.h,
                     fit: BoxFit.cover,
                   ),
                   Positioned(
-                    top: 16,
-                    right: 16,
+                    top: 16.h,
+                    right: 16.w,
                     child: TextButton(
                       onPressed: () {},
                       child: Row(
@@ -33,16 +35,16 @@ class LoginView extends GetView<LoginController> {
                             'Skip',
                             style: GoogleFonts.getFont(
                               'Lufga',
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          const Icon(
+                          SizedBox(width: 4.w),
+                          Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.white,
-                            size: 16,
+                            size: 16.sp,
                           ),
                         ],
                       ),
@@ -51,7 +53,7 @@ class LoginView extends GetView<LoginController> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(24.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -59,59 +61,59 @@ class LoginView extends GetView<LoginController> {
                       'Login',
                       style: GoogleFonts.getFont(
                         'Lufga',
-                        fontSize: 32,
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
                     Text(
                       'Email Address',
                       style: GoogleFonts.getFont(
                         'Lufga',
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     TextField(
                       controller: controller.emailController,
                       decoration: InputDecoration(
                         hintText: 'Johndoe@Gmail.Com',
                         hintStyle: GoogleFonts.getFont(
                           'Lufga',
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           color: Colors.black87,
                         ),
                         filled: true,
                         fillColor: const Color(0xFFF5F5F5),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 18,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 18.h,
                         ),
                       ),
                       style: GoogleFonts.getFont(
                         'Lufga',
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                     Text(
                       'Password',
                       style: GoogleFonts.getFont(
                         'Lufga',
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     Obx(
                       () => TextField(
                         controller: controller.passwordController,
@@ -120,18 +122,18 @@ class LoginView extends GetView<LoginController> {
                           hintText: '********',
                           hintStyle: GoogleFonts.getFont(
                             'Lufga',
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             color: Colors.black87,
                           ),
                           filled: true,
                           fillColor: const Color(0xFFF5F5F5),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.r),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 18,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20.w,
+                            vertical: 18.h,
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
@@ -139,18 +141,19 @@ class LoginView extends GetView<LoginController> {
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                               color: Colors.grey,
+                              size: 22.sp,
                             ),
                             onPressed: controller.togglePasswordVisibility,
                           ),
                         ),
                         style: GoogleFonts.getFont(
                           'Lufga',
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           color: Colors.black,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -159,18 +162,18 @@ class LoginView extends GetView<LoginController> {
                           'Forgot password?',
                           style: GoogleFonts.getFont(
                             'Lufga',
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             color: Colors.black,
                             decoration: TextDecoration.underline,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                     Obx(
                       () => SizedBox(
                         width: double.infinity,
-                        height: 56,
+                        height: 56.h,
                         child: ElevatedButton(
                           onPressed: controller.isLoading.value
                               ? null
@@ -178,19 +181,24 @@ class LoginView extends GetView<LoginController> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF8B4513),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
                             elevation: 0,
                           ),
                           child: controller.isLoading.value
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white,
+                              ? SizedBox(
+                                  width: 24.w,
+                                  height: 24.h,
+                                  child: const CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : Text(
                                   'Login',
                                   style: GoogleFonts.getFont(
                                     'Lufga',
-                                    fontSize: 18,
+                                    fontSize: 18.sp,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white,
                                   ),
@@ -198,7 +206,7 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -207,7 +215,7 @@ class LoginView extends GetView<LoginController> {
                             "Don't Have an account? ",
                             style: GoogleFonts.getFont(
                               'Lufga',
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               color: Colors.black,
                             ),
                           ),
@@ -217,7 +225,7 @@ class LoginView extends GetView<LoginController> {
                               'Sign Up',
                               style: GoogleFonts.getFont(
                                 'Lufga',
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                                 decoration: TextDecoration.underline,
