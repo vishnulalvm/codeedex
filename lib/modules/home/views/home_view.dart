@@ -36,8 +36,10 @@ class HomeView extends GetView<HomeController> {
           Stack(
             children: [
               IconButton(
-                icon: const Icon(Icons.notifications_outlined,
-                    color: Colors.white),
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.white,
+                ),
                 onPressed: () {},
               ),
               Obx(() {
@@ -142,9 +144,11 @@ class HomeView extends GetView<HomeController> {
               return _buildCarouselItemFromApi(
                 banner.title,
                 banner.subTitle,
-                controller.getImageUrl(banner.mobileImage.isNotEmpty
-                    ? banner.mobileImage
-                    : banner.image),
+                controller.getImageUrl(
+                  banner.mobileImage.isNotEmpty
+                      ? banner.mobileImage
+                      : banner.image,
+                ),
                 const Color(0xFFFF8C42),
                 banner.buttonText,
               );
@@ -155,12 +159,11 @@ class HomeView extends GetView<HomeController> {
     });
   }
 
-  Widget _buildCarouselItemFromApi(
+  Widget _buildCarouselItem(
     String title,
     String subtitle,
-    String imageUrl,
+    String imagePath,
     Color backgroundColor,
-    String buttonText,
   ) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8.w),
@@ -179,11 +182,7 @@ class HomeView extends GetView<HomeController> {
                 topRight: Radius.circular(16),
                 bottomRight: Radius.circular(16),
               ),
-              child: CachedImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.cover,
-                height: 180.h,
-              ),
+              child: Image.asset(imagePath, fit: BoxFit.cover, height: 180.h),
             ),
           ),
           Padding(
@@ -224,13 +223,10 @@ class HomeView extends GetView<HomeController> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.r),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                   child: Text(
-                    buttonText.isNotEmpty ? buttonText : 'Shop Now',
+                    'Shop Now',
                     style: GoogleFonts.getFont(
                       'Lufga',
                       fontSize: 13.sp,
@@ -267,11 +263,11 @@ class HomeView extends GetView<HomeController> {
               Row(
                 children: [
                   IconButton(
-                    icon:  Icon(Icons.arrow_back_ios, size: 16.sp),
+                    icon: Icon(Icons.arrow_back_ios, size: 16.sp),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon:  Icon(Icons.arrow_forward_ios, size: 16.sp),
+                    icon: Icon(Icons.arrow_forward_ios, size: 16.sp),
                     onPressed: () {},
                   ),
                 ],
@@ -295,8 +291,6 @@ class HomeView extends GetView<HomeController> {
                       '/product-list',
                       arguments: {
                         'categoryName': category.name.replaceAll('\n', ' '),
-                        'categorySlug': category.slug ?? '',
-                        'filterBy': 'category',
                       },
                     );
                   },
@@ -308,13 +302,13 @@ class HomeView extends GetView<HomeController> {
                         Container(
                           width: 70.w,
                           height: 70.h,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFF5F5F5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
                             shape: BoxShape.circle,
                           ),
                           child: ClipOval(
-                            child: CachedImage(
-                              imageUrl: controller.getCategoryImageUrl(category.image),
+                            child: Image.asset(
+                              category.image,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -405,11 +399,11 @@ class HomeView extends GetView<HomeController> {
               Row(
                 children: [
                   IconButton(
-                    icon:  Icon(Icons.arrow_back_ios, size: 16.sp),
+                    icon: Icon(Icons.arrow_back_ios, size: 16.sp),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon:  Icon(Icons.arrow_forward_ios, size: 16.sp),
+                    icon: Icon(Icons.arrow_forward_ios, size: 16.sp),
                     onPressed: () {},
                   ),
                 ],
@@ -448,87 +442,75 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget _buildAdBanner() {
-    return Obx(() {
-      if (controller.adBanners.isEmpty) {
-        return const SizedBox.shrink();
-      }
-
-      final adBanner = controller.adBanners.first;
-      return Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w),
-        padding: EdgeInsets.all(20.w),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF9B7CB6), Color(0xFF8B6BA3)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF9B7CB6), Color(0xFF8B6BA3)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hurry Up! Get 10% Off',
+                  style: GoogleFonts.getFont(
+                    'Lufga',
+                    fontSize: 14.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  'Power Your Day\nwith Nuts & Dry Fruits',
+                  style: GoogleFonts.getFont(
+                    'Lufga',
+                    fontSize: 18.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    height: 1.2,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: const Color(0xFF9B7CB6),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  ),
+                  child: Text(
+                    'Shop Now',
+                    style: GoogleFonts.getFont(
+                      'Lufga',
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    adBanner.title,
-                    style: GoogleFonts.getFont(
-                      'Lufga',
-                      fontSize: 14.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    adBanner.subTitle,
-                    style: GoogleFonts.getFont(
-                      'Lufga',
-                      fontSize: 18.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      height: 1.2,
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF9B7CB6),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10,
-                      ),
-                    ),
-                    child: Text(
-                      adBanner.buttonText.isNotEmpty
-                          ? adBanner.buttonText
-                          : 'Shop Now',
-                      style: GoogleFonts.getFont(
-                        'Lufga',
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: 16.w),
-            CachedImage(
-              imageUrl: controller.getImageUrl(adBanner.image),
-              height: 120.h,
-              fit: BoxFit.contain,
-            ),
-          ],
-        ),
-      );
-    });
+          SizedBox(width: 16.w),
+          Image.asset(
+            'assets/image/adbanner_image.png',
+            height: 120.h,
+            fit: BoxFit.contain,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildBottomNav() {
@@ -537,7 +519,7 @@ class HomeView extends GetView<HomeController> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.2),
+            color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -2),
@@ -557,38 +539,34 @@ class HomeView extends GetView<HomeController> {
         ),
         unselectedLabelStyle: GoogleFonts.getFont(
           'Lufga',
+
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
         ),
-        items:  [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.category),
             label: 'Categories',
           ),
           BottomNavigationBarItem(
-            icon: Obx(() => Stack(
-                  children: [
-                    const Icon(Icons.shopping_cart_outlined),
-                    if (controller.cartCount.value > 0)
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: CircleAvatar(
-                          radius: 6,
-                          backgroundColor: Colors.red,
-                          child: Text(
-                            '${controller.cartCount.value}',
-                            style:
-                                TextStyle(fontSize: 8.sp, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                  ],
-                )),
+            icon: Stack(
+              children: [
+                Icon(Icons.shopping_cart_outlined),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: CircleAvatar(
+                    radius: 6,
+                    backgroundColor: Colors.red,
+                    child: Text(
+                      '0',
+                      style: TextStyle(fontSize: 8.sp, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             label: 'Cart',
           ),
           BottomNavigationBarItem(
