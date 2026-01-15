@@ -8,13 +8,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize storage service
-  await StorageService().init();
+  final storageService = StorageService();
+  await storageService.init();
 
-  runApp(const MyApp());
+  // Check if user is logged in
+  final token = storageService.getToken();
+  final isLoggedIn = token != null && token.isNotEmpty;
+
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +37,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          initialRoute: AppPages.INITIAL,
+          initialRoute: isLoggedIn ? Routes.HOME : Routes.LOGIN,
           getPages: AppPages.routes,
         );
       },
