@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../widgets/product_card.dart';
+import '../../../widgets/cached_image.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -32,71 +33,134 @@ class HomeView extends GetView<HomeController> {
             icon: const Icon(Icons.favorite_border, color: Colors.white),
             onPressed: () {},
           ),
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.white),
-            onPressed: () {},
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined,
+                    color: Colors.white),
+                onPressed: () {},
+              ),
+              Obx(() {
+                if (controller.notificationCount.value > 0) {
+                  return Positioned(
+                    right: 8,
+                    top: 8,
+                    child: CircleAvatar(
+                      radius: 8,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        '${controller.notificationCount.value}',
+                        style: TextStyle(fontSize: 10.sp, color: Colors.white),
+                      ),
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
+            ],
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildCarousel(),
-            SizedBox(height: 20.h),
-            _buildCategories(),
-            SizedBox(height: 24.h),
-            _buildFeaturedProducts(),
-            SizedBox(height: 24.h),
-            _buildDailyBestSelling(),
-            SizedBox(height: 24.h),
-            _buildAdBanner(),
-            SizedBox(height: 24.h),
-            _buildRecentlyAdded(),
-            SizedBox(height: 24.h),
-            _buildPopularProducts(),
-            SizedBox(height: 24.h),
-            _buildTrendingProducts(),
-            SizedBox(height: 80.h),
-          ],
-        ),
-      ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.hasError.value) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                SizedBox(height: 16.h),
+                Text(
+                  controller.errorMessage.value,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.getFont('Lufga', fontSize: 16.sp),
+                ),
+                SizedBox(height: 16.h),
+                ElevatedButton(
+                  onPressed: controller.loadHomeData,
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: controller.loadHomeData,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCarousel(),
+                SizedBox(height: 20.h),
+                _buildCategories(),
+                SizedBox(height: 24.h),
+                _buildFeaturedProducts(),
+                SizedBox(height: 24.h),
+                _buildDailyBestSelling(),
+                SizedBox(height: 24.h),
+                _buildAdBanner(),
+                SizedBox(height: 24.h),
+                _buildRecentlyAdded(),
+                SizedBox(height: 24.h),
+                _buildPopularProducts(),
+                SizedBox(height: 24.h),
+                _buildTrendingProducts(),
+                SizedBox(height: 80.h),
+              ],
+            ),
+          ),
+        );
+      }),
       bottomNavigationBar: _buildBottomNav(),
     );
   }
 
   Widget _buildCarousel() {
-    return Column(
-      children: [
-        CarouselSlider(
-          options: CarouselOptions(
-            height: 180.h,
-            viewportFraction: 0.9,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 3),
-            enlargeCenterPage: true,
-            onPageChanged: (index, reason) {
-              controller.onCarouselChanged(index);
-            },
-          ),
-          items: [
-            _buildCarouselItem(
-              'Hurry Up! Get 10% Off',
-              'Go Natural with Unpolished Grains',
-              'assets/image/carosoul.png',
-              const Color(0xFFFF8C42),
+    return Obx(() {
+      if (controller.banners.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
+      return Column(
+        children: [
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 180.h,
+              viewportFraction: 0.9,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              enlargeCenterPage: true,
+              onPageChanged: (index, reason) {
+                controller.onCarouselChanged(index);
+              },
             ),
-          ],
-        ),
-      ],
-    );
+            items: controller.banners.map((banner) {
+              return _buildCarouselItemFromApi(
+                banner.title,
+                banner.subTitle,
+                controller.getImageUrl(banner.mobileImage.isNotEmpty
+                    ? banner.mobileImage
+                    : banner.image),
+                const Color(0xFFFF8C42),
+                banner.buttonText,
+              );
+            }).toList(),
+          ),
+        ],
+      );
+    });
   }
 
-  Widget _buildCarouselItem(
+  Widget _buildCarouselItemFromApi(
     String title,
     String subtitle,
-    String imagePath,
+    String imageUrl,
     Color backgroundColor,
+    String buttonText,
   ) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8.w),
@@ -115,8 +179,8 @@ class HomeView extends GetView<HomeController> {
                 topRight: Radius.circular(16),
                 bottomRight: Radius.circular(16),
               ),
-              child: Image.asset(
-                imagePath,
+              child: CachedImage(
+                imageUrl: imageUrl,
                 fit: BoxFit.cover,
                 height: 180.h,
               ),
@@ -160,13 +224,13 @@ class HomeView extends GetView<HomeController> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.r),
                     ),
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 10,
                     ),
                   ),
                   child: Text(
-                    'Shop Now',
+                    buttonText.isNotEmpty ? buttonText : 'Shop Now',
                     style: GoogleFonts.getFont(
                       'Lufga',
                       fontSize: 13.sp,
@@ -229,7 +293,11 @@ class HomeView extends GetView<HomeController> {
                   onTap: () {
                     Get.toNamed(
                       '/product-list',
-                      arguments: {'categoryName': category.name.replaceAll('\n', ' ')},
+                      arguments: {
+                        'categoryName': category.name.replaceAll('\n', ' '),
+                        'categorySlug': category.slug ?? '',
+                        'filterBy': 'category',
+                      },
                     );
                   },
                   child: Container(
@@ -240,13 +308,13 @@ class HomeView extends GetView<HomeController> {
                         Container(
                           width: 70.w,
                           height: 70.h,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF5F5F5),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFF5F5F5),
                             shape: BoxShape.circle,
                           ),
                           child: ClipOval(
-                            child: Image.asset(
-                              category.image,
+                            child: CachedImage(
+                              imageUrl: controller.getCategoryImageUrl(category.image),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -380,78 +448,87 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget _buildAdBanner() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF9B7CB6), Color(0xFF8B6BA3)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Obx(() {
+      if (controller.adBanners.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
+      final adBanner = controller.adBanners.first;
+      return Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        padding: EdgeInsets.all(20.w),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF9B7CB6), Color(0xFF8B6BA3)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16.r),
         ),
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hurry Up! Get 10% Off',
-                  style: GoogleFonts.getFont(
-                    'Lufga',
-                    fontSize: 14.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  'Power Your Day\nwith Nuts & Dry Fruits',
-                  style: GoogleFonts.getFont(
-                    'Lufga',
-                    fontSize: 18.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF9B7CB6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                  ),
-                  child: Text(
-                    'Shop Now',
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    adBanner.title,
                     style: GoogleFonts.getFont(
                       'Lufga',
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 14.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 8.h),
+                  Text(
+                    adBanner.subTitle,
+                    style: GoogleFonts.getFont(
+                      'Lufga',
+                      fontSize: 18.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      height: 1.2,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF9B7CB6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                    ),
+                    child: Text(
+                      adBanner.buttonText.isNotEmpty
+                          ? adBanner.buttonText
+                          : 'Shop Now',
+                      style: GoogleFonts.getFont(
+                        'Lufga',
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: 16.w),
-          Image.asset(
-            'assets/image/adbanner_image.png',
-            height: 120.h,
-            fit: BoxFit.contain,
-          ),
-        ],
-      ),
-    );
+            SizedBox(width: 16.w),
+            CachedImage(
+              imageUrl: controller.getImageUrl(adBanner.image),
+              height: 120.h,
+              fit: BoxFit.contain,
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildBottomNav() {
@@ -460,7 +537,7 @@ class HomeView extends GetView<HomeController> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -2),
@@ -493,23 +570,25 @@ class HomeView extends GetView<HomeController> {
             label: 'Categories',
           ),
           BottomNavigationBarItem(
-            icon: Stack(
-              children: [
-                Icon(Icons.shopping_cart_outlined),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: CircleAvatar(
-                    radius: 6,
-                    backgroundColor: Colors.red,
-                    child: Text(
-                      '0',
-                      style: TextStyle(fontSize: 8.sp, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            icon: Obx(() => Stack(
+                  children: [
+                    const Icon(Icons.shopping_cart_outlined),
+                    if (controller.cartCount.value > 0)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: CircleAvatar(
+                          radius: 6,
+                          backgroundColor: Colors.red,
+                          child: Text(
+                            '${controller.cartCount.value}',
+                            style:
+                                TextStyle(fontSize: 8.sp, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                  ],
+                )),
             label: 'Cart',
           ),
           BottomNavigationBarItem(

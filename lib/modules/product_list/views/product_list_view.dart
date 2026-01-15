@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../models/product_model.dart';
+import '../../../widgets/cached_image.dart';
 import '../controllers/product_list_controller.dart';
 
 class ProductListView extends GetView<ProductListController> {
@@ -58,22 +59,83 @@ class ProductListView extends GetView<ProductListController> {
       body: Column(
         children: [
           Expanded(
-            child: Obx(
-              () => GridView.builder(
-                padding: EdgeInsets.all(16.w),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.68,
-                  crossAxisSpacing: 12.w,
-                  mainAxisSpacing: 12.h,
+            child: Obx(() {
+              if (controller.isLoading.value && controller.products.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (controller.hasError.value && controller.products.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                      SizedBox(height: 16.h),
+                      Text(
+                        controller.errorMessage.value,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.getFont('Lufga', fontSize: 16.sp),
+                      ),
+                      SizedBox(height: 16.h),
+                      ElevatedButton(
+                        onPressed: controller.refreshProducts,
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (controller.products.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.shopping_bag_outlined, size: 64.sp, color: Colors.grey),
+                      SizedBox(height: 16.h),
+                      Text(
+                        'No products found',
+                        style: GoogleFonts.getFont('Lufga', fontSize: 16.sp),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return RefreshIndicator(
+                onRefresh: controller.refreshProducts,
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+                      controller.loadMoreProducts();
+                    }
+                    return false;
+                  },
+                  child: GridView.builder(
+                    padding: EdgeInsets.all(16.w),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.68,
+                      crossAxisSpacing: 12.w,
+                      mainAxisSpacing: 12.h,
+                    ),
+                    itemCount: controller.products.length + (controller.hasMorePages.value ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == controller.products.length) {
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.w),
+                            child: const CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                      final product = controller.products[index];
+                      return _buildProductCard(product);
+                    },
+                  ),
                 ),
-                itemCount: controller.products.length,
-                itemBuilder: (context, index) {
-                  final product = controller.products[index];
-                  return _buildProductCard(product);
-                },
-              ),
-            ),
+              );
+            }),
           ),
           _buildBottomActions(),
         ],
@@ -92,7 +154,7 @@ class ProductListView extends GetView<ProductListController> {
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 5,
               offset: const Offset(0, 2),
@@ -114,11 +176,17 @@ class ProductListView extends GetView<ProductListController> {
                     ),
                   ),
                   child: Center(
-                    child: Image.asset(
-                      product.image,
-                      height: 100.h,
-                      fit: BoxFit.contain,
-                    ),
+                    child: product.image.startsWith('http')
+                        ? CachedImage(
+                            imageUrl: product.image,
+                            height: 100.h,
+                            fit: BoxFit.contain,
+                          )
+                        : Image.asset(
+                            product.image,
+                            height: 100.h,
+                            fit: BoxFit.contain,
+                          ),
                   ),
                 ),
                 if (discount > 0)
@@ -190,26 +258,29 @@ class ProductListView extends GetView<ProductListController> {
                     const Spacer(),
                     Row(
                       children: [
-                        Text(
-                          '₹ ${product.originalPrice.toStringAsFixed(2)}',
-                          style: GoogleFonts.getFont(
-                            'Lufga',
-                            fontSize: 12.sp,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w400,
-                            decoration: product.originalPrice > 0
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
+                        if (product.originalPrice > 0)
+                          Text(
+                            'QAR ${product.originalPrice.toStringAsFixed(2)}',
+                            style: GoogleFonts.getFont(
+                              'Lufga',
+                              fontSize: 12.sp,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.lineThrough,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          '₹ ${product.discountedPrice.toStringAsFixed(2)}',
-                          style: GoogleFonts.getFont(
-                            'Lufga',
-                            fontSize: 15.sp,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                        if (product.originalPrice > 0) SizedBox(width: 6.w),
+                        Expanded(
+                          child: Text(
+                            'QAR ${product.discountedPrice.toStringAsFixed(2)}',
+                            style: GoogleFonts.getFont(
+                              'Lufga',
+                              fontSize: 15.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -326,7 +397,7 @@ class ProductListView extends GetView<ProductListController> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -2),

@@ -1,11 +1,32 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/product_model.dart';
+import '../../../services/product_service.dart';
 
 class ProductListController extends GetxController {
+  final ProductService _productService = ProductService();
+
   final RxList<ProductModel> products = <ProductModel>[].obs;
   final RxMap<String, int> cartQuantities = <String, int>{}.obs;
   final RxString categoryName = ''.obs;
+  final RxString categorySlug = ''.obs;
   final RxInt totalItems = 0.obs;
+
+  // Pagination
+  final RxInt currentPage = 1.obs;
+  final RxInt lastPage = 1.obs;
+  final RxBool hasMorePages = false.obs;
+  final RxBool isLoadingMore = false.obs;
+
+  // Loading states
+  final RxBool isLoading = false.obs;
+  final RxBool hasError = false.obs;
+  final RxString errorMessage = ''.obs;
+
+  // Filters and sorting
+  final RxString sortBy = ''.obs;
+  final RxString sortOrder = ''.obs;
+  final RxString filterBy = 'category'.obs; // category, brand, store
 
   @override
   void onInit() {
@@ -13,86 +34,105 @@ class ProductListController extends GetxController {
     final args = Get.arguments;
     if (args != null) {
       categoryName.value = args['categoryName'] ?? 'Products';
+      categorySlug.value = args['categorySlug'] ?? '';
+      filterBy.value = args['filterBy'] ?? 'category';
       loadProducts();
     }
   }
 
-  void loadProducts() {
-    products.value = [
-      ProductModel(
-        id: '1',
-        name: 'Chana dal 1KG',
-        category: 'Unpolished Pulses',
-        originalPrice: 105.00,
-        discountedPrice: 80.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '2',
-        name: 'Roasted Chana 750g',
-        category: 'Unpolished Pulses',
-        originalPrice: 95.00,
-        discountedPrice: 125.00,
-        weight: '750g',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '3',
-        name: 'Toor Dal 1KG',
-        category: 'Unpolished Pulses',
-        originalPrice: 153.00,
-        discountedPrice: 210.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '4',
-        name: 'Red Chana 1 kg',
-        category: 'Unpolished Pulses',
-        originalPrice: 95.00,
-        discountedPrice: 135.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '5',
-        name: 'Grenn Moong 500G',
-        category: 'Unpolished Pulses',
-        originalPrice: 72.00,
-        discountedPrice: 90.00,
-        weight: '500g',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '6',
-        name: 'Masoor Dal 1KG',
-        category: 'Unpolished Pulses',
-        originalPrice: 0,
-        discountedPrice: 125.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '7',
-        name: 'Ground Nuts 500g',
-        category: 'Unpolished Pulses',
-        originalPrice: 86.00,
-        discountedPrice: 105.00,
-        weight: '500g',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '8',
-        name: 'Urad Dal 1KG',
-        category: 'Unpolished Pulses',
-        originalPrice: 150.00,
-        discountedPrice: 180.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-    ];
-    totalItems.value = products.length;
+  Future<void> loadProducts({bool refresh = false}) async {
+    try {
+      if (refresh) {
+        currentPage.value = 1;
+        products.clear();
+      }
+
+      isLoading.value = true;
+      hasError.value = false;
+
+      final response = await _productService.getProducts(
+        by: categorySlug.isNotEmpty ? filterBy.value : null,
+        value: categorySlug.isNotEmpty ? categorySlug.value : null,
+        sortBy: sortBy.value.isNotEmpty ? sortBy.value : null,
+        sortOrder: sortOrder.value.isNotEmpty ? sortOrder.value : null,
+        page: currentPage.value,
+      );
+
+      if (response.isSuccess) {
+        // Convert API products to ProductModel
+        final newProducts = response.products.map((p) {
+          return ProductModel(
+            id: p.slug,
+            name: p.name,
+            category: p.store.isNotEmpty ? p.store : p.manufacturer,
+            originalPrice: p.oldPriceValue,
+            discountedPrice: p.priceValue,
+            weight: '',
+            image: p.image,
+            slug: p.slug,
+            store: p.store,
+            manufacturer: p.manufacturer,
+          );
+        }).toList();
+
+        if (refresh) {
+          products.value = newProducts;
+        } else {
+          products.addAll(newProducts);
+        }
+
+        // Update pagination data
+        if (response.pagination != null) {
+          currentPage.value = response.pagination!.currentPage;
+          lastPage.value = response.pagination!.lastPage;
+          hasMorePages.value = response.pagination!.hasMorePages;
+          totalItems.value = response.pagination!.total;
+        } else {
+          totalItems.value = products.length;
+        }
+      } else {
+        hasError.value = true;
+        errorMessage.value = response.message;
+      }
+    } catch (e) {
+      hasError.value = true;
+      errorMessage.value = e.toString().replaceAll('Exception: ', '');
+
+      Get.snackbar(
+        'Error',
+        errorMessage.value,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
+        colorText: Colors.red,
+      );
+    } finally {
+      isLoading.value = false;
+      isLoadingMore.value = false;
+    }
+  }
+
+  Future<void> loadMoreProducts() async {
+    if (isLoadingMore.value || !hasMorePages.value) return;
+
+    isLoadingMore.value = true;
+    currentPage.value++;
+    await loadProducts();
+  }
+
+  Future<void> refreshProducts() async {
+    await loadProducts(refresh: true);
+  }
+
+  void applySorting(String sortByValue, String sortOrderValue) {
+    sortBy.value = sortByValue;
+    sortOrder.value = sortOrderValue;
+    loadProducts(refresh: true);
+  }
+
+  String getProductImageUrl(String imagePath) {
+    if (imagePath.isEmpty) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return imagePath;
   }
 
   int getDiscountPercentage(ProductModel product) {

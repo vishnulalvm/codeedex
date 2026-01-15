@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/product_model.dart';
+import 'cached_image.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -15,6 +16,9 @@ class ProductCard extends StatelessWidget {
     required this.onAddToCart,
   });
 
+  bool get _isNetworkImage =>
+      product.image.startsWith('http') || product.image.startsWith('https');
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,7 +28,7 @@ class ProductCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, 2),
@@ -46,11 +50,17 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
                 child: Center(
-                  child: Image.asset(
-                    product.image,
-                    height: 100.h,
-                    fit: BoxFit.contain,
-                  ),
+                  child: _isNetworkImage
+                      ? CachedImage(
+                          imageUrl: product.image,
+                          height: 100.h,
+                          fit: BoxFit.contain,
+                        )
+                      : Image.asset(
+                          product.image,
+                          height: 100.h,
+                          fit: BoxFit.contain,
+                        ),
                 ),
               ),
               Positioned(
@@ -107,19 +117,20 @@ class ProductCard extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Row(
                   children: [
-                    Text(
-                      '₹ ${product.originalPrice.toStringAsFixed(2)}',
-                      style: GoogleFonts.getFont(
-                        'Lufga',
-                        fontSize: 11.sp,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.lineThrough,
+                    if (product.originalPrice > 0)
+                      Text(
+                        'QAR ${product.originalPrice.toStringAsFixed(2)}',
+                        style: GoogleFonts.getFont(
+                          'Lufga',
+                          fontSize: 11.sp,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 6.w),
+                    if (product.originalPrice > 0) SizedBox(width: 6.w),
                     Text(
-                      '₹ ${product.discountedPrice.toStringAsFixed(2)}',
+                      'QAR ${product.discountedPrice.toStringAsFixed(2)}',
                       style: GoogleFonts.getFont(
                         'Lufga',
                         fontSize: 14.sp,

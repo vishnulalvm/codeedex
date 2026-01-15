@@ -1,8 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/category_model.dart';
 import '../../../models/product_model.dart';
+import '../../../models/home_response_model.dart';
+import '../../../services/home_service.dart';
+import '../../../constants/api_constants.dart';
 
 class HomeController extends GetxController {
+  final HomeService _homeService = HomeService();
+
   final RxInt currentCarouselIndex = 0.obs;
   final RxList<ProductModel> featuredProducts = <ProductModel>[].obs;
   final RxList<ProductModel> dailyBestSelling = <ProductModel>[].obs;
@@ -10,150 +16,160 @@ class HomeController extends GetxController {
   final RxList<ProductModel> popularProducts = <ProductModel>[].obs;
   final RxList<ProductModel> trendingProducts = <ProductModel>[].obs;
   final RxList<CategoryModel> categories = <CategoryModel>[].obs;
+  final RxList<BannerModel> banners = <BannerModel>[].obs;
+  final RxList<BannerModel> adBanners = <BannerModel>[].obs;
+  final RxList<FeaturedBrand> featuredBrands = <FeaturedBrand>[].obs;
+
+  final RxBool isLoading = false.obs;
+  final RxBool hasError = false.obs;
+  final RxString errorMessage = ''.obs;
+  final RxInt cartCount = 0.obs;
+  final RxInt notificationCount = 0.obs;
+  final Rx<CurrencyModel?> currency = Rx<CurrencyModel?>(null);
 
   @override
   void onInit() {
     super.onInit();
-    loadCategories();
-    loadProducts();
+    loadHomeData();
   }
 
-  void loadCategories() {
-    categories.value = [
-      CategoryModel(
-        id: '1',
-        name: 'Unpolished\nPulses',
-        image: 'assets/image/incradient.png',
-      ),
-      CategoryModel(
-        id: '2',
-        name: 'Unpolished\nRice',
-        image: 'assets/image/incradient.png',
-      ),
-      CategoryModel(
-        id: '3',
-        name: 'Unpolished\nMillets',
-        image: 'assets/image/incradient.png',
-      ),
-      CategoryModel(
-        id: '4',
-        name: 'Nuts & Dry\nFruits',
-        image: 'assets/image/incradient.png',
-      ),
-      CategoryModel(
-        id: '5',
-        name: 'Unpolished\nFlours',
-        image: 'assets/image/incradient.png',
-      ),
-    ];
+  Future<void> loadHomeData() async {
+    try {
+      isLoading.value = true;
+      hasError.value = false;
+
+      final response = await _homeService.getHomeData();
+
+      if (response.isSuccess) {
+        // Load banners
+        if (response.banner1.isNotEmpty) {
+          banners.value = response.banner1;
+        }
+
+        // Load ad banners (using banner2)
+        if (response.banner2.isNotEmpty) {
+          adBanners.value = response.banner2;
+        }
+
+        // Load categories
+        categories.value = response.categories
+            .map((item) => CategoryModel.fromJson({
+                  'category': {
+                    'id': item.category.id,
+                    'name': item.category.name,
+                    'image': item.category.image,
+                    'slug': item.category.slug,
+                    'description': item.category.description,
+                  },
+                  'subcategory': item.subcategory,
+                }))
+            .toList();
+
+        // Load products from different sections
+        featuredProducts.value =
+            response.ourProducts.map((p) => ProductModel.fromJson({
+                  'slug': p.slug,
+                  'name': p.name,
+                  'store': p.store,
+                  'manufacturer': p.manufacturer,
+                  'oldprice': p.oldPrice,
+                  'price': p.price,
+                  'image': p.image,
+                })).toList();
+
+        dailyBestSelling.value =
+            response.bestSeller.map((p) => ProductModel.fromJson({
+                  'slug': p.slug,
+                  'name': p.name,
+                  'store': p.store,
+                  'manufacturer': p.manufacturer,
+                  'oldprice': p.oldPrice,
+                  'price': p.price,
+                  'image': p.image,
+                })).toList();
+
+        recentlyAdded.value =
+            response.newArrivals.map((p) => ProductModel.fromJson({
+                  'slug': p.slug,
+                  'name': p.name,
+                  'store': p.store,
+                  'manufacturer': p.manufacturer,
+                  'oldprice': p.oldPrice,
+                  'price': p.price,
+                  'image': p.image,
+                })).toList();
+
+        popularProducts.value =
+            response.suggestedProducts.map((p) => ProductModel.fromJson({
+                  'slug': p.slug,
+                  'name': p.name,
+                  'store': p.store,
+                  'manufacturer': p.manufacturer,
+                  'oldprice': p.oldPrice,
+                  'price': p.price,
+                  'image': p.image,
+                })).toList();
+
+        trendingProducts.value =
+            response.flashSale.map((p) => ProductModel.fromJson({
+                  'slug': p.slug,
+                  'name': p.name,
+                  'store': p.store,
+                  'manufacturer': p.manufacturer,
+                  'oldprice': p.oldPrice,
+                  'price': p.price,
+                  'image': p.image,
+                })).toList();
+
+        // Load other data
+        featuredBrands.value = response.featuredBrands;
+        cartCount.value = response.cartCount;
+        notificationCount.value = response.notificationCount;
+        currency.value = response.currency;
+      } else {
+        hasError.value = true;
+        errorMessage.value = response.message;
+      }
+    } catch (e) {
+      hasError.value = true;
+      errorMessage.value = e.toString().replaceAll('Exception: ', '');
+
+      Get.snackbar(
+        'Error',
+        errorMessage.value,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
+        colorText: Colors.red,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
-  void loadProducts() {
-    featuredProducts.value = [
-      ProductModel(
-        id: '1',
-        name: 'Light pink salt 1 kg',
-        category: 'Flours & Supers',
-        originalPrice: 67.00,
-        discountedPrice: 80.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '2',
-        name: 'Idly ravva 1 kg',
-        category: 'Flours & Supers',
-        originalPrice: 46.00,
-        discountedPrice: 65.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-    ];
-
-    dailyBestSelling.value = [
-      ProductModel(
-        id: '3',
-        name: 'Black Eyed Peas-1kg',
-        category: 'Unpolished Pulses',
-        originalPrice: 90.00,
-        discountedPrice: 130.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '4',
-        name: 'Browntop millet 1KG',
-        category: 'Unpolished Millets',
-        originalPrice: 175.00,
-        discountedPrice: 230.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-    ];
-
-    recentlyAdded.value = [
-      ProductModel(
-        id: '5',
-        name: 'Cashew nuts 250g',
-        category: 'Nuts & Dry Fruits',
-        originalPrice: 270.00,
-        discountedPrice: 400.00,
-        weight: '250g',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '6',
-        name: 'Almonds 500g',
-        category: 'Nuts & Dry Fruits',
-        originalPrice: 80.00,
-        discountedPrice: 700.00,
-        weight: '500g',
-        image: 'assets/image/itemone.png',
-      ),
-    ];
-
-    popularProducts.value = [
-      ProductModel(
-        id: '7',
-        name: 'Black Eyed Peas-1kg',
-        category: 'Unpolished Pulses',
-        originalPrice: 90.00,
-        discountedPrice: 130.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '8',
-        name: 'Idly ravva 1 kg',
-        category: 'Flours & Supers',
-        originalPrice: 46.00,
-        discountedPrice: 65.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-    ];
-
-    trendingProducts.value = [
-      ProductModel(
-        id: '9',
-        name: 'Browntop millet 1KG',
-        category: 'Unpolished Millets',
-        originalPrice: 174.00,
-        discountedPrice: 235.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-      ProductModel(
-        id: '10',
-        name: 'Light pink salt 1 kg',
-        category: 'Flours & Supers',
-        originalPrice: 67.00,
-        discountedPrice: 80.00,
-        weight: '1kg',
-        image: 'assets/image/itemone.png',
-      ),
-    ];
+  String getImageUrl(String imagePath) {
+    if (imagePath.isEmpty) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return '${ApiConstants.imageBaseUrl}/images/banner/$imagePath';
   }
+
+  String getCategoryImageUrl(String imagePath) {
+    if (imagePath.isEmpty) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return '${ApiConstants.imageBaseUrl}/images/category/$imagePath';
+  }
+
+  String getProductImageUrl(String imagePath) {
+    if (imagePath.isEmpty) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return imagePath;
+  }
+
+  String getBrandImageUrl(String imagePath) {
+    if (imagePath.isEmpty) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    return '${ApiConstants.imageBaseUrl}/images/manufacturer/$imagePath';
+  }
+
 
   void onCarouselChanged(int index) {
     currentCarouselIndex.value = index;
