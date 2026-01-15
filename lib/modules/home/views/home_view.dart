@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../widgets/product_card.dart';
-import '../../../widgets/cached_image.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -159,11 +158,12 @@ class HomeView extends GetView<HomeController> {
     });
   }
 
-  Widget _buildCarouselItem(
+  Widget _buildCarouselItemFromApi(
     String title,
     String subtitle,
     String imagePath,
     Color backgroundColor,
+    String buttonText,
   ) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8.w),
@@ -226,7 +226,7 @@ class HomeView extends GetView<HomeController> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                   child: Text(
-                    'Shop Now',
+                    buttonText,
                     style: GoogleFonts.getFont(
                       'Lufga',
                       fontSize: 13.sp,
